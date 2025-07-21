@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+<include file="$(find exploration_manager)/launch/rviz.launch">
+    <arg name="rviz_config" value="$(find exploration_manager)/config/real_robot.rviz"/>
+</include>
+
+</launch>

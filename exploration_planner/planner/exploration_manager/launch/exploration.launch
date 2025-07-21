@@ -1,0 +1,70 @@
+<launch>
+
+  <arg name="mapper_config"/>
+
+  <arg name="world_frame_id" default="world"/>
+  <arg name="mav_name" />
+
+  <!-- topic of your odometry such as VIO or LIO -->
+  <arg name="camera_depth_topic" default="/pcl_render_node/depth" />
+  
+  <arg name="max_vel" default="1.0" />
+  <arg name="max_acc" default="1.0" />
+
+  <arg name="slam_odom_topic"/>
+  <arg name="vio_odom_topic"/>
+
+  <arg name="line_tracker_topic" default="/ddk/trackers_manager/line_tracker_min_jerk/LineTracker"/>
+  <arg name="service_transition_topic" default="/ddk/trackers_manager/transition" />
+
+  <!-- main algorithm params -->
+  <include file="$(find exploration_manager)/launch/algorithm.xml">
+
+    <arg name="slam_odom_topic" value="$(arg slam_odom_topic)"/>
+    <arg name="vio_odom_topic" value="$(arg vio_odom_topic)"/>
+    <arg name="frame_id"    value="$(arg world_frame_id)"/>
+    
+    <arg name="mapper_config" value="$(arg mapper_config)"/>
+
+    <!-- sensor pose: transform of camera frame in the world frame -->
+    <arg name="sensor_pose_topic" value="/pcl_render_node/sensor_pose"/>
+    <!-- depth topic: depth image, 640x480 by default -->
+    <!-- cloud topic: point cloud measurement  -->
+
+    <arg name="depth_topic" value="$(arg camera_depth_topic)"/>
+    <arg name="cloud_topic" value="/pcl_render_node/cloud"/>
+
+    <arg name="waypoints_topic" value="/$(arg mav_name)/waypoint_generator/waypoints"/>
+    <arg name="tracker_topic" value="/$(arg mav_name)/trackers_manager/poly_tracker/PolyTracker/goal"/>
+    <arg name="srv_name"  value="/$(arg mav_name)/mav_services/poly_tracker"/>
+
+    <arg name="line_tracker_topic" value="$(arg line_tracker_topic)"/>
+    <arg name="service_transition_topic" value="$(arg service_transition_topic)"/>
+
+    <!-- maximum velocity and acceleration the drone will reach -->
+    <arg name="max_vel" value="$(arg max_vel)" />
+    <arg name="max_acc" value="$(arg max_acc)" />
+  </include>
+
+
+  <node pkg="waypoint_generator" name="waypoint_generator" type="waypoint_generator" output="screen" launch-prefix="nice -n 10">
+    <remap from="~odom" to="$(arg slam_odom_topic)"/>        
+    <remap from="~goal" to="/move_base_simple/goal"/>
+    <remap from="~traj_start_trigger" to="/traj_start_trigger" />
+    <param name="waypoint_type" value="point"/>    
+  </node>
+
+
+  <node pkg="odom_visualization" name="odom_visualization" type="odom_visualization" output="screen" launch-prefix="nice -n 10">
+        <remap from="~slam_odom" to="$(arg slam_odom_topic)"/>
+        <remap from="~vio_odom" to="$(arg vio_odom_topic)"/>
+        <param name="color/a" value="1.0"/>    
+        <param name="color/r" value="0.0"/>        
+        <param name="color/g" value="0.0"/>        
+        <param name="color/b" value="1.0"/>       
+        <param name="covariance_scale" value="100.0"/>       
+        <param name="robot_scale" value="1.0"/>
+
+  </node>
+
+</launch>

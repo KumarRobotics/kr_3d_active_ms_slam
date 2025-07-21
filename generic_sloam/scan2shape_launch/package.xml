@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>scan2shape_launch</name>
+  <version>0.0.0</version>
+  <description>The scan2shape_launch package</description>
+
+  <maintainer email="liuxu@seas.upenn.edu">Xu Liu</maintainer>
+  <maintainer email="pra.ankiict@gmail.com">Ankit Prabhu</maintainer>
+
+  <license>Penn Software License</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <export>
+  </export>
+</package>

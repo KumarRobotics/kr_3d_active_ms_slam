@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <rosparam command="load" file="$(find loop_closure)/config/loop_closure.yaml" />
+    <node pkg="loop_closure" type="loop_closure_server_node" name="loop_closure_server_node" output="screen">
+    </node>
+
+</launch>

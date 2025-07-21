@@ -1,0 +1,9 @@
+<launch>
+
+  <node pkg="exploration_manager" name="global_plan_server_node" type="global_plan_server_node" output="screen" launch-prefix="nice -n 10">
+    <remap from="~global_plan_server" to="/exploration/global_plan_server"/>        
+  </node>
+
+
+
+</launch>

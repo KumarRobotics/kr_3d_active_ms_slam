@@ -1,0 +1,29 @@
+<launch>
+  <arg name="mav_name" default="ddk"/>
+  <arg name="mav_type" default="dragon_ddk"/>
+  <arg name="world_frame_id" default="world"/>
+  <arg name="color/r" default="0.0"/>
+  <arg name="color/g" default="0.0"/>
+  <arg name="color/b" default="1.0"/>
+  <arg name="color/a" default="0.7"/>
+
+  <arg name="mapper_config" default="$(find exploration_manager)/config/mapper.yaml"/>
+
+  <arg name="slam_odom_topic" default="/factor_graph_atl/quadrotor/high_freq_odom"/>
+  <arg name="vio_odom_topic" default="/gt_odom_perturbed"/>
+
+  <group ns="$(arg mav_name)">
+
+    <include file="$(find exploration_manager)/launch/exploration.launch">
+      <arg name="world_frame_id" value="$(arg world_frame_id)"/>
+      <arg name="mav_name"   value="$(arg mav_name)"/>
+      <arg name="slam_odom_topic" value="$(arg slam_odom_topic)"/>
+      <arg name="vio_odom_topic" value="$(arg vio_odom_topic)"/>
+
+      <arg name="camera_depth_topic" value="/ddk/rgbd/depth/image_raw" />
+      <arg name="mapper_config" value="$(arg mapper_config)"/>
+
+    </include>
+  </group>
+
+</launch>

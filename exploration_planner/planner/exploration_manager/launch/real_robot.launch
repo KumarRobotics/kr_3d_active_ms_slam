@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="world_frame_id"/>
+  <arg name="mav_name"/>
+
+  <arg name="color/r" default="0.0"/>
+  <arg name="color/g" default="0.0"/>
+  <arg name="color/b" default="1.0"/>
+  <arg name="color/a" default="0.7"/>
+
+  <arg name="slam_odom_topic"/>
+  <arg name="vio_odom_topic"/>
+  <!-- for gazebo sim / experiment is 2-->
+  <arg name="camera_pose_type" default="2" />
+
+  <arg name="mapper_config"/>
+  <arg name="traj_planner_config"/>
+
+
+  <arg name="line_tracker_topic" default="/f250_ariel/trackers_manager/line_tracker_min_jerk/LineTracker"/>
+  <arg name="service_transition_topic" default="/f250_ariel/trackers_manager/transition" />
+
+  <!-- main algorithm params -->
+    <include file="$(find exploration_manager)/launch/algorithm.xml">
+      <arg name="mapper_config" value="$(arg mapper_config)"/>
+      <arg name="traj_planner_config" value="$(arg traj_planner_config)"/>
+
+      <arg name="slam_odom_topic" value="$(arg slam_odom_topic)"/>
+      <arg name="vio_odom_topic" value="$(arg vio_odom_topic)"/>
+      <arg name="frame_id"    value="$(arg world_frame_id)"/>
+
+      <!-- sensor pose: transform of camera frame in the world frame -->
+      <arg name="sensor_pose_topic" value="/pcl_render_node/sensor_pose"/>
+      <!-- depth topic: depth image, 640x480 by default -->
+      <!-- cloud topic: point cloud measurement  -->
+      <arg name="depth_topic" value="/camera/depth/image_rect_raw"/>
+      <arg name="cloud_topic" value="/pcl_render_node/cloud"/>
+
+      <arg name="waypoints_topic" value="/$(arg mav_name)/waypoint_generator/waypoints"/>
+      <arg name="tracker_topic" value="/$(arg mav_name)/trackers_manager/poly_tracker/PolyTracker/goal"/>
+      <arg name="srv_name"  value="/$(arg mav_name)/mav_services/poly_tracker"/>
+
+      <arg name="line_tracker_topic" value="$(arg line_tracker_topic)"/>
+      <arg name="service_transition_topic" value="$(arg service_transition_topic)"/>
+
+      <!-- maximum velocity and acceleration the drone will reach, box but the total value -->
+      <arg name="max_vel"   value="1.0" />
+      <arg name="max_acc"   value="2.0" />
+
+    </include>
+
+  <node pkg="waypoint_generator" name="waypoint_generator" type="waypoint_generator" output="screen" launch-prefix="nice -n 10">
+    <remap from="~odom" to="$(arg slam_odom_topic)"/>        
+    <remap from="~goal" to="/move_base_simple/goal"/>
+    <remap from="~traj_start_trigger" to="/traj_start_trigger" />
+    <param name="waypoint_type" value="point"/>    
+  </node>
+
+  <node pkg="odom_visualization" name="odom_visualization" type="odom_visualization" output="screen" launch-prefix="nice -n 10">
+      <remap from="~slam_odom" to="$(arg slam_odom_topic)"/>
+      <remap from="~vio_odom" to="$(arg vio_odom_topic)"/>
+      <param name="color/r" value="$(arg color/r)"/>    
+      <param name="color/g" value="$(arg color/g)"/>        
+      <param name="color/b" value="$(arg color/b)"/>        
+      <param name="color/a" value="1.0"/> 
+      <param name="covariance_scale" value="100.0"/>       
+      <param name="robot_scale" value="1.0"/>
+      <param name="frame_id" value ="$(arg world_frame_id)"/>
+  </node>
+
+
+</launch>

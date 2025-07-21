@@ -1,0 +1,19 @@
+[submodule "catkin_simple"]
+	path = catkin_simple
+	url = https://github.com/catkin/catkin_simple.git
+[submodule "GCOPTER_F250"]
+	path = GCOPTER_F250
+	url = https://github.com/tyuezhan/GCOPTER_F250.git
+	branch = exploration
+[submodule "kr_mav_control"]
+	path = kr_mav_control
+	url = https://github.com/tyuezhan/kr_mav_control.git
+	branch = sloam_real_robot
+[submodule "mrsl_quadrotor"]
+	path = mrsl_quadrotor
+	url = https://github.com/tyuezhan/mrsl_quadrotor.git
+	branch = falconet
+[submodule "qflight_descriptions"]
+	path = qflight_descriptions
+	url = https://github.com/tyuezhan/qflight_descriptions.git
+	branch = devel_kr

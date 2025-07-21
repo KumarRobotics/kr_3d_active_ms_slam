@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>loop_closure</name>
+  <version>0.0.0</version>
+  <description>The loop closure package</description>
+
+  <author email="igorspas@seas.upenn.edu">Igor Spasojevic</author>
+  <author email="liuxu@seas.upenn.edu">Xu Liu</author>
+  <author email="yztao@seas.upenn.edu">Yuezhan Tao</author>
+  <maintainer email="yztao@seas.upenn.edu">Yuezhan Tao</maintainer>
+
+  <license>Penn Software License</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>sloam_msgs</depend>
+
+  <depend>tf2</depend>
+  <depend>tf2_eigen</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>actionlib</depend>
+  <depend>actionlib_msgs</depend>
+
+
+  <export>
+  </export>
+</package>

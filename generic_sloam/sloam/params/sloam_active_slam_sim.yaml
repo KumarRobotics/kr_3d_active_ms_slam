@@ -1,0 +1,20 @@
+enable_rviz: true
+factor_graph_atl:
+  odom_topic: "/gt_odom_perturbed"
+  map_frame_id: "world" 
+  debug_mode: false
+  publish_tf: false 
+  min_odom_distance: 0.5
+  # TODO: scale odom noise with motion distance in sloam implementation
+  # IMPORTANT: the following params influence: (1) odom factor (2) loop closure factor (3) estimated loop closure factor and info gain
+  odom_factor_position_noise_std_xy: 0.01 # 1.0 # default: 3.0 # odometry between factor x y position noise std
+  odom_factor_position_noise_std_z: 0.01 # 0.1 # default: 0.3 # odometry between z position noise std 
+  odom_factor_orientation_noise_std: 0.0001 # default:0.0001 # odometry between factor orientation noise std in rad
+  odom_factor_noise_std_inflation_per_min: 0.0 # 0.0 means no inflation
+  bearing_factor_noise_std: 10 # should be 0.03, default: 1.0 bearing noise std in rad
+  range_factor_noise_std: 50 # default: 1.0 bearing noise std in rad
+  run_factor_graph_rate: 5.0 # Hz, rate at which factor graph input node will be running
+  max_odom_queue_size: 500
+  # TODO: scale closure_noise_std_wrt_odom_factor with motion distance
+  closure_noise_std_wrt_odom_factor: 0.001 # closure_factor noise std = odom_factor noise std * closure_noise_std_wrt_odom_factor
+  data_association_distance_normed: 1.0 # data association distance normed for point landmarks

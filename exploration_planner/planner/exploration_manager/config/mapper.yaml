@@ -1,0 +1,78 @@
+# global mapper config
+global:
+  map_min_boundary_x: -2.5
+  map_min_boundary_y: -2.5
+  map_min_boundary_z: -0.1
+  map_max_boundary_x: 15.0
+  map_max_boundary_y: 15.0
+  map_max_boundary_z: 2.5
+  box_min_x: -2.5 # Used to bound the actual update range of the map
+  box_min_y: -2.5
+  box_max_x: 15.0
+  box_max_y: 15.0
+  box_max_z: 2.0
+  resolution: 0.25 # resolution of the map (high impact on memory and computation usage
+  max_ray_length: 5.0 # max raycast range, the smaller, the less computation demand, but shorter perception range
+  min_ray_length: 0.3
+  inflation_xy: 0.3 # dilate global map along x and y axis 
+  inflation_z: 0.0 # dilate global map along z axis 
+  decay_times_to_empty: 0 # number of times of decay to empty, 0 means no decay, the noisier your state estimator is, the smaller this value should be (when using ground-truth pose, set this as 0)
+  decay_amount_lower_than_occ: 0.1 # decay amount for cells below min_occ_log_. The cell will be decayed to min_occ_log - decay_amount_lower_than_occ.
+
+local:
+  # local planning horizon will be from robot to the local voxel map boundary
+  # center of local map will be the same as robot current odometry along x and y direction, and the same as global map center along z direction
+  map_size_x: 10.0 # range of the map in x-axis
+  map_size_y: 10.0 # range of the map in y-axis
+  map_size_z: 2.5 # range of the map in z-axis
+  resolution: 0.1 # resolution of the map
+  inflation_xy: 0.4 # dilate storage map along x and y axis 
+  inflation_z: 0.0 # dilate storage map along z axis 
+  max_ray_length: 5.0 # max raycast range, the smaller, the less computation demand, but shorter perception range
+  min_ray_length: 0.3
+  decay_times_to_empty: 0 # number of times of decay to empty, 0 means no decay, the noisier your state estimator is, the smaller this value should be (when using ground-truth pose, set this as 0)
+  decay_amount_lower_than_occ: 0.1 # decay amount for cells below min_occ_log_. The cell will be decayed to min_occ_log - decay_amount_lower_than_occ.
+
+
+# Raycasting-based map fusion params
+map_update_bound_inflate: 0.5 
+skip_pixel: 2 # number of pixel skipped for each update
+p_hit: 0.70 # probability of hit
+p_miss: 0.35 # probability of miss
+p_min: 0.12 # minimum probability
+p_max: 0.97 # maximum probability
+p_occ: 0.80 # probability of occupied
+virtual_ceil_height: -10 # virtual ceiling height, used to bound the raycast range
+depth_filter_maxdist: 5.0 # max depth range for raycast
+depth_filter_mindist: 0.2 # min depth range for raycast
+depth_filter_margin: 2 # margin for depth filter
+k_depth_scaling_factor: 1000.0 # scaling factor for depth
+visualization_truncate_high: 10.09 # max depth range for visualization
+visualization_truncate_low: -2.0 # min depth range for visualization
+show_occ_time: false # show occupancy time
+show_all_map: true # show all map
+
+# Camera params
+# Simulation camera K
+fx: 387.229248046875 # focal length in x-axis
+fy: 387.229248046875 # focal length in y-axis
+cx: 321.04638671875 # principal point in x-axis
+cy: 243.44969177246094 # principal point in y-axis
+pose_type: 2 # For Rviz sim =1, for gazebo_sim=2
+
+
+# No flight zones for experiment
+set_no_flight_zone: false
+# no_flight_zone_num: 2
+# no_flight_zone_0_x_min: -9.6
+# no_flight_zone_0_x_max: 2.4
+# no_flight_zone_0_y_min: -2.58
+# no_flight_zone_0_y_max: 9.4
+# no_flight_zone_0_z_min: 0.0
+# no_flight_zone_0_z_max: 2.5
+# no_flight_zone_1_x_min: 0.0
+# no_flight_zone_1_x_max: 10.0
+# no_flight_zone_1_y_min: 0.0
+# no_flight_zone_1_y_max: 10.0
+# no_flight_zone_1_z_min: 0.0
+# no_flight_zone_1_z_max: 10.0

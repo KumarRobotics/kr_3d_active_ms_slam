@@ -1,0 +1,16 @@
+<launch>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="mapper_config" default="$(find exploration_manager)/config/mapper.yaml"/>
+
+    <node name="rgb_sem_segmentation" pkg="rgb_sem_segmentation" type="detect.py" output="screen" >
+        <rosparam file="$(arg mapper_config)" />
+        <param name="~sim" value="true"/>
+        <param name="~desired_rate" value="3"/>
+        <param name="~rgb_topic" value="/ddk/rgbd/rgb/image_raw"/>
+        <param name="~aligned_depth_topic" value="/ddk/rgbd/depth/image_raw"/>
+        <param name="~odom_topic" value="/ddk/ground_truth/odom"/>
+        <param name="~sync_odom_measurements" value="true"/>
+        <remap from="~sync_pc_odom_topic" to="/sem_detection/sync_pc_odom"/>
+    </node>
+
+</launch>

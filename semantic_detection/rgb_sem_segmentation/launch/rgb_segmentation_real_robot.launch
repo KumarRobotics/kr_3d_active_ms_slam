@@ -1,0 +1,18 @@
+<launch>
+
+    <node name="rgb_sem_segmentation" pkg="rgb_sem_segmentation" type="detect.py" output="screen" >
+        <param name="~sim" value="false"/>
+        <param name="~desired_rate" value="2"/>
+        <param name="~rgb_topic" value="/camera/color/image_raw/"/>
+        <param name="~aligned_depth_topic" value="/camera/aligned_depth_to_color/image_raw"/>
+        <param name="~odom_topic" value="/dragonfly67/quadrotor_ukf/control_odom"/>
+        <param name="~sync_odom_measurements" value="true"/>
+        <remap from="~sync_pc_odom_topic" to="/sem_detection/sync_pc_odom"/>
+        <param name="~fx" value="603.7166748046875" />
+        <param name="~fy" value="603.9064331054688" />
+        <param name="~cx" value="314.62518310546875" />
+        <param name="~cy" value="244.9166717529297" />
+
+    </node>
+
+</launch>

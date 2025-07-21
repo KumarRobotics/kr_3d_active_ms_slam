@@ -1,0 +1,9 @@
+<launch>
+    <arg name="use_sim_time" value="true"/>
+
+    <node name="loop_closure_submap_node" pkg="scan2shape_launch" type="loop_closure_submap_node.py" output="screen" >
+        <param name="~reference_frame" value="world"/>
+
+    </node>
+
+</launch>

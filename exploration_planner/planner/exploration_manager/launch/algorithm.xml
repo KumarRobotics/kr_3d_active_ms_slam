@@ -1,0 +1,193 @@
+<launch>
+
+  <arg name="frame_id"/>
+
+  <arg name="mapper_config"/>
+  <arg name="traj_planner_config" default="$(find gcopter)/config/global_planning.yaml"/>
+
+  <arg name="sensor_pose_topic"/>
+  <arg name="depth_topic"/>
+  <arg name="cloud_topic"/>
+
+  <arg name="max_vel"/>
+  <arg name="max_acc"/>
+
+  <arg name="waypoints_topic"/>
+  <arg name="tracker_topic"/>
+  <arg name="srv_name"/>
+
+  <arg name="play_bag" default="false"/>
+
+  <arg name="slam_odom_topic"/>
+  <arg name="vio_odom_topic"/>
+
+  <arg name="line_tracker_topic"/>
+  <arg name="service_transition_topic"/>
+
+
+  <!-- main node -->
+  <node pkg="exploration_manager" name="exploration_node" type="exploration_node" output="screen" >
+    <rosparam file="$(arg mapper_config)" ns="map_ros"/>
+    <rosparam file="$(arg traj_planner_config)" command="load"/>
+    
+    <param name="debug_print" value="false" type="bool" />
+    
+    <remap from ="/odom_slam" to="$(arg slam_odom_topic)"/>
+    <remap from ="/odom_vio" to="$(arg vio_odom_topic)"/>
+    <remap from ="/map_ros/pose"  to = "$(arg sensor_pose_topic)"/> 
+    <remap from ="/map_ros/depth" to = "$(arg depth_topic)"/>
+    <remap from ="/map_ros/cloud" to="$(arg cloud_topic)"/>
+    <param name="map_ros/frame_id"      value="world"/>
+
+    <!-- Planner -->
+    <remap from="~waypoints"  to="$(arg waypoints_topic)"/>
+    <remap from="~tracker_cmd"  to="$(arg tracker_topic)"/>
+    <param name="srv_name"     value="$(arg srv_name)"/>
+    <param name="plan_frame_id"  value ="$(arg frame_id)"/>
+
+    <!-- Fsm -->
+    <param name="fsm/closure_replan_thresh" value="0.5" type="double"/>
+
+    <param name="fsm/thresh_replan1" value="1.0" type="double"/>
+    <param name="fsm/thresh_replan2" value="2.0" type="double"/>
+    <param name="fsm/thresh_replan3" value="2.5" type="double"/>
+    <param name="fsm/estop_time"     value="1.0" type="double"/>
+
+    <param name="fsm/replan_time" value="0.3" type="double"/>
+    <param name="fsm/play_bag" value="$(arg play_bag)" type="bool"/>
+
+    <!-- Exploration manager -->
+
+    <param name="exploration/refine_local" value="true" type="bool"/>
+    <param name="exploration/refined_num" value="7" type="int"/>
+    <param name="exploration/refined_radius" value="5.0" type="double"/>
+    <param name="exploration/max_decay" value="0.8" type="double"/>
+    <param name="exploration/top_view_num" value="15" type="int"/>
+    <param name="exploration/vm" value="$(eval 1.0 * arg('max_vel'))" type="double"/>
+    <param name="exploration/am" value="$(eval 1.0 * arg('max_acc'))" type="double"/>
+    <param name="exploration/yd" value="$(eval 60 * 3.1415926 / 180.0)" type="double"/>
+    <param name="exploration/ydd" value="$(eval 90 * 3.1415926 / 180.0)" type="double"/>
+    <param name="exploration/w_dir" value="1.5" type="double"/>
+    <param name="exploration/relax_time" value="1.0" type="double"/>
+    <param name="exploration/detect_semantics" value="false" type="bool"/>
+    <param name="exploration/use_IG" value="false" type="bool"/>
+    <param name="exploration/classic" value="false" type="bool"/>
+    
+    <param name="exploration/radius_far"    value="5.0" type="double"/>
+    <param name="exploration/radius_close"  value="2.0" type="double"/>
+    <param name="exploration/radius_noplan" value="0.5" type="double"/>
+
+    <param name="frontier/exp_3d" value="true" type="bool"/>
+    <param name="frontier/cluster_min" value="18" type="int"/>
+    <param name="frontier/cluster_size_xy" value="1.2" type="double"/>
+    <param name="frontier/cluster_size_z" value="2.0" type="double"/>
+    <param name="frontier/room_min_candidate_dist" value="0.20" type="double"/>
+    <param name="frontier/min_candidate_dist" value="0.6" type="double"/>
+    <param name="frontier/min_candidate_obs_clearance" value="0.60" type="double"/>
+    <param name="frontier/min_candidate_clearance" value="0.6" type="double"/>
+    <param name="frontier/candidate_dphi" value="$(eval 15 * 3.1415926 / 180.0)" type="double"/>
+    <param name="frontier/candidate_rnum" value="3" type="int"/>
+    <param name="frontier/candidate_rmin" value="1.0" type="double"/>
+    <param name="frontier/candidate_rmax" value="1.5" type="double"/>
+
+    <param name="frontier/down_sample" value="3" type="int"/>;
+    <param name="frontier/min_visib_num" value="8" type="int"/>;
+    <param name="frontier/min_info_gain" value="300" type="int"/>;
+    <param name="frontier/min_view_finish_fraction" value="0.15" type="double"/>;
+    <param name="frontier/h_fov" value="1.51844" type="double"/>;
+    <param name="frontier/v_fov" value="1.01229" type="double"/>;
+    <param name="frontier/min_ray_length" value="0.0" type="double"/>;
+    <param name="frontier/max_ray_length" value="5.0" type="double"/>;
+    <param name="frontier/door_confirm_thres" value="1.2" type="double"/>;
+    <param name="frontier/door_cross_thres" value="0.9" type="double"/>;
+    <param name="frontier/door_exit_thres" value="1.2" type="double"/>;
+    <param name="frontier/door_confirm_dis" value="1.0" type="double"/>;
+    <param name="frontier/door_cross_dis" value="1.8" type="double"/>;
+    <param name="frontier/door_exit_dis" value="1.0" type="double"/>;
+    <param name="frontier/h_min_line_length" value="9" type="double"/>;
+    <param name="frontier/h_max_line_gap" value="6" type="double"/>;
+    <param name="frontier/v_min_line_length" value="12" type="double"/>;
+    <param name="frontier/v_max_line_gap" value="6" type="double"/>;
+    <param name="frontier/h_min_door" value="6" type="int"/>;
+    <param name="frontier/h_max_door" value="17" type="int"/>;
+    <param name="frontier/v_min_door" value="6" type="int"/>;
+    <param name="frontier/v_max_door" value="17" type="int"/>;
+
+    <!-- Perception utils -->
+    <param name="perception_utils/top_angle" value="0.56125" type="double"/>;
+    <param name="perception_utils/left_angle" value="0.69222" type="double"/>;
+    <param name="perception_utils/right_angle" value="0.68901" type="double"/>;
+    <param name="perception_utils/max_dist" value="3.0" type="double"/>;
+    <param name="perception_utils/vis_dist" value="1.0" type="double"/>;
+
+
+    <!-- planner manager -->
+    <param name="manager/max_vel" value="$(arg max_vel)" type="double"/>
+    <param name="manager/max_acc" value="$(arg max_acc)" type="double"/>
+    <param name="manager/max_jerk" value="4" type="double"/>
+    <param name="manager/max_dyaw" value="$(eval 60 * 3.1415926 / 180.0)" type="double"/>
+    <param name="manager/max_ddyaw" value="$(eval 90 * 3.1415926 / 180.0)" type="double"/>
+
+    
+    <param name="manager/dynamic_environment" value="0" type="int"/>
+    <param name="manager/local_segment_length" value="6.0" type="double"/>
+    <param name="manager/clearance_threshold" value="0.2" type="double"/>
+    <param name="manager/control_points_distance" value="0.35" type="double"/>
+
+    <!-- kinodynamic path searching -->
+    <param name="manager/use_astar_path" value="true" type="bool"/>
+    <param name="manager/use_kino_acc_path" value="true" type="bool"/>
+    <param name="manager/use_kino_jerk_path" value="false" type="bool"/>
+    <param name="manager/use_topo_path" value="true" type="bool"/>
+    <param name="manager/min_time" value="true" type="bool"/>
+
+
+    <param name="manager/time_res"   value="0.2" /> 
+
+    <param name="manager/line_tracker_topic" value="$(arg line_tracker_topic)"/>
+    <param name="manager/service_transition_topic" value="$(arg service_transition_topic)"/>
+
+    <!-- kinodynamic path searching -->
+    <param name="search/max_tau" value="0.6" type="double"/>
+    <param name="search/init_max_tau" value="0.6" type="double"/>
+    <param name="search/max_vel" value="$(arg max_vel)" type="double"/>
+    <param name="search/max_acc" value="$(arg max_acc)" type="double"/>
+    <param name="search/max_jerk" value="4" type="double"/>
+    <param name="search/w_time" value="3.0" type="double"/>
+    <param name="search/horizon" value="15" type="double"/>
+    <param name="search/lambda_heu" value="5.0" type="double"/>
+    <param name="search/resolution_astar" value="0.1" type="double"/>
+    <param name="search/time_resolution" value="0.2" type="double"/>
+    <param name="search/margin" value="0.2" type="double"/>
+    <param name="search/allocate_num" value="100000" type="int"/>
+    <param name="search/optimistic" value="false" type="bool"/>
+    <param name="search/vis_check_num" value="15" type="int"/>
+
+    <param name="search/w_uyaw" value="3.0" type="double"/>
+    <param name="search/w_ref" value="40.0" type="double"/>
+    <param name="search/w_semantics" value="1.0" type="double"/>
+    <param name="search/w_info" value="0.008" type="double"/>
+    <param name="search/yaw_resolution"  value="0.1" type="double"/>
+    <param name="search/max_search_time" value="0.2" type="double"/>
+    <param name="astar/lambda_heu" value="1.0" type="double"/>
+    <param name="astar/resolution_astar" value="0.02" type="double"/>
+    <param name="astar/allocate_num" value="1000000" type="int"/>
+    <param name="astar/max_search_time" value="0.2" type="double"/>
+
+    <!-- optimization -->
+    <param name="optimization/w_time"     value="0.5" type="double"/>
+    <param name="optimization/w_vel"      value="10000.0" type="double"/>
+    <param name="optimization/w_acc"      value="10000.0" type="double"/>
+    <param name="optimization/w_sta_obs"  value="20.0" type="double"/>
+    <param name="optimization/ego_radius" value="0.01" type="double"/>
+
+    <param name="optimization/w_yaw_time"     value="1.0" type="double"/>
+    <param name="optimization/w_refyaw"       value="40.0" type="double"/>
+    <param name="optimization/w_dyaw"         value="2000.0" type="double"/>
+    <param name="optimization/w_ddyaw"        value="4000.0" type="double"/>
+
+    <param name="sfc_gen/rils_bb_back"     value="2.0" type="double"/>
+    <param name="sfc_gen/rils_bb_front"    value="2.0" type="double"/>
+  </node>
+
+</launch>

@@ -1,0 +1,10 @@
+Header header
+# bool add_factor # if is best action
+float64[] travel_distances # distance to travel
+uint64[] candidate_traj_pose_indices # candidate trajectory pose indices
+# std_msgs/UInt64 current_pose_id # current key pose id in factor graph 
+# std_msgs/UInt64 closure_key_pose_id # history key pose id for candidate loop closure in factor graph
+# bool reset # if reset the factor graph, sync with the true factor graph
+---
+float64 information_gain # information gain
+bool success # if success

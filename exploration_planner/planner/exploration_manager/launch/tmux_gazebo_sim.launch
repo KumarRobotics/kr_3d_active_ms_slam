@@ -1,0 +1,12 @@
+<launch>
+
+  <include file="$(find exploration_manager)/launch/gazebo.launch">
+    <arg name="world" value="smallroom1"/>
+  </include>
+
+  <include file="$(find exploration_manager)/launch/rviz.launch">
+    <arg name="rviz_config" value="$(find exploration_manager)/config/gazebo_sloam.rviz"/>
+  </include>
+
+
+</launch>

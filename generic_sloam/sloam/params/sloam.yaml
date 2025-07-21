@@ -1,0 +1,48 @@
+enable_rviz: true
+sloam:
+  # cloud_topic: /os_node/llol_odom/sweep # not used
+  number_of_robots: 2
+  robot_ns_prefix: /quadrotor # robot_namespace will be robot_prefix + ROBOT_ID (e.g. /quadrotor1, /quadrotor2)
+  odom_topic: lidar_odom #  robot odometry topic will be robot_namespace  + / + odom_topic (e.g. /quadrotor1/lidar_odom)
+  debug_mode: false
+  publish_tf: false 
+  do_destagger: false # if point clouds is staggered, do destagger (specifically for our integration with faster lio this should be false, and for LLOL this should be true)
+
+  two_step_optim: true
+  beam_cluster_threshold: 0.5 #1.5 # max euclidean distance to cluster lidar beams
+  default_tree_radius: 0.2 # default tree radius if estimated value seems wrong (due to outliers for example)
+  max_dist_to_centroid: 0.2 # consider points further than this parameter to the node centroid to be outliers
+  max_ground_dist: 20.0 #100.0 # max distance from sensor for ground point to be considered
+  min_ground_dist: 3 # min distance from sensor for ground point to be considered
+  max_lidar_dist:  20.0 #100.0 # max distance from sensor for a point to be considered
+  min_landmark_height: 1.0 #0.25 # if a tree is smaller than this, it will be discarded
+  min_landmark_size: 3 #1 # min number of trellis nodes for a tree
+  min_vertex_size: 3 #1 # min required number of point in a trellis node
+  min_tree_models: 3 # NOT USED ANYMORE # min number of tree models in observation to perform pose estimation
+  min_ground_models: 5 #2 # min number of ground models in observation to perform pose estimation
+  num_ground_features: 5 # number of points to keep per plane model
+  ground_radii_bins: 2 # 5 bins based on the distance from sensor
+  ground_theta_bins: 10 # 36 bins relative to angle around lidar
+  ground_match_thresh: 1.0 #2.0 # threshold to match planes
+  ground_retain_thresh: 0.05 # keep bottom x% of the points per bin
+  features_per_tree: 50 # number of points to keep per tree model
+  add_new_tree_thresh_dist: 2 # tree must be at least Xm away from other to be added to the semantic map
+  rough_tree_match_thresh: 5.5 # rough match before computing the more costly cylinder to cylinder dist
+  tree_match_thresh: 1.0 # dist threshold between point and model to use in pose estimation
+
+  min_sloam_z: -1
+
+  odom_freq_filter: 1  # Add every x odom messages to the queue. Target same freq. as lidar. odom_freq = raw_odom_freq / odom_freq_filter
+  max_queue_size: 50 # maximum queue size for point clouds buffer (odom buffer will be 10x this)
+  min_odom_distance: 0.5
+  max_tree_radius: 1.0 # max tree radius
+  max_axis_theta: 20.0  # max tree incline angle in degree
+  map_frame_id: quadrotor/map
+  odom_frame_id: quadrotor/odom
+  robot_frame_id: body
+  run_segmentation: false
+  seg_model_path: "" # not used.. path to segmentation model
+  seg_lidar_fov: 22.5 # lidar FOV
+  seg_lidar_w: 1024 # lidar width
+  seg_lidar_h: 64 # lidar height
+

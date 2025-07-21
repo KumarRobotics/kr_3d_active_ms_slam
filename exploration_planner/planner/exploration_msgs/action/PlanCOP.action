@@ -1,0 +1,22 @@
+# Action goal
+Header header
+int32 mat_size
+float64[] info_gain
+float64[] cost_mat
+float64[] correlation_mat
+float64 budget
+int32 problem_size
+---
+# Action result
+Header header
+bool success
+bool killed
+float64[] cost_mat # The cost mat used for the solution
+float64[] correlation_mat # The correlation mat used for the solution
+int32 mat_size
+int32[] sequence # The planned sequence
+float64 budget # The budget used for the solution
+---
+# Action feedback
+Header header
+duration computation_time
